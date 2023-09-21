@@ -1,0 +1,7 @@
+---
+- name: install additionnal packages
+  apt:
+    name: "{{ additionnal_packages }}"
+    update_cache: yes
+    state: present
+  when: additionnal_packages|default(False)

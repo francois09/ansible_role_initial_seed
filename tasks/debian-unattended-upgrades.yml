@@ -1,0 +1,42 @@
+---
+- name: install unattended-upgrades package
+  apt:
+    name:
+      - unattended-upgrades
+    update_cache: yes
+    state: present
+  tags:
+    - packages
+
+- name: install packages for Debian posterior to Wheezy
+  apt:
+    name:
+      - reboot-notifier
+    update_cache: yes
+    state: present
+  when: ansible_distribution_major_version|int >= 8
+  tags:
+    - packages
+
+- name: Configure APT::Periodic prior to Stretch release
+  template:
+    src: templates/apt-periodic
+    dest: /etc/apt/apt.conf.d/02periodic
+    owner: root
+    mode: 0644
+  when: ansible_distribution_major_version|int < 9
+
+- name: Configure APT:Periodic
+  template:
+    src: templates/apt-periodic
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    owner: root
+    mode: 0644
+  when: ansible_distribution_major_version|int >= 9
+
+- name: Configure unattended-upgrades
+  template:
+    src: templates/50unattended-upgrades_{{ ansible_distribution_release }}
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+    owner: root
+    mode: 0644

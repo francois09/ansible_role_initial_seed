@@ -1,0 +1,17 @@
+---
+- name: install common packages
+  apt:
+    name: "{{ default_packages }}"
+    update_cache: yes
+    state: present
+  tags:
+    - packages
+
+- name: uninstall common packages
+  apt:
+    name: "{{ default_remove_packages }}"
+    update_cache: yes
+    state: absent
+    purge: yes
+  tags:
+    - packages

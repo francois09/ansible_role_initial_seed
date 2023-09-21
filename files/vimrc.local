@@ -1,0 +1,6 @@
+" Source defauts.vim
+source $VIMRUNTIME/defaults.vim
+" Avoid second load if no user vimrc
+let skip_defaults_vim = 1
+" Disable some settings
+set mouse-=a

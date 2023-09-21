@@ -1,0 +1,14 @@
+{% if apt_periodic_enable %}
+APT::Periodic::Enable "1";
+{% else %}
+APT::Periodic::Enable "0";
+{% endif %}
+APT::Periodic::Update-Package-Lists "{{ apt_periodic_update_package_list }}";
+APT::Periodic::Download-Upgradeable-Packages "{{ apt_periodic_download_upgradeable_packages }}";
+APT::Periodic::AutocleanInterval "7";
+APT::Periodic::RandomSleep "300";
+{% if apt_periodic_unattended_upgrade%}
+APT::Periodic::Unattended-Upgrade "1";
+{% else %}
+APT::Periodic::Unattended-Upgrade "0";
+{% endif %}

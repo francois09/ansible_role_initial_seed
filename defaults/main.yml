@@ -1,0 +1,16 @@
+---
+apt_periodic_enable: true
+apt_periodic_unattended_upgrade: false
+apt_periodic_update_package_list: 1
+apt_periodic_download_upgradeable_packages: 0
+
+unattended_upgrade_package_blacklist: []
+unattended_upgrade_origins_pattern: []
+unattended_upgrade_auto_reboot: 'false'
+unattended_upgrade_auto_reboot_with_users: 'false'
+unattended_upgrade_auto_reboot_time: '06:00'
+
+# To install backports repository,
+# specify section(s) separate by space:
+# ie: 'main contrib non-free'
+apt_backports_repository: false

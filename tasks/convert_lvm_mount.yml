@@ -1,0 +1,31 @@
+---
+- name: Check if /LVM is a mountpoint
+  set_fact:
+    lvm_device: "{{ ansible_mounts|json_query(jquery)|default(['']) }}"
+  vars:
+    jquery: "[?mount=='/LVM'].device"
+  check_mode: False
+
+- block:
+    - name: Unmount the device
+      mount:
+        state: unmounted
+        path: /LVM
+    - name: Unmount the device
+      mount:
+        state: absent
+        path: /LVM
+    - name: Remove mountpoint
+      file:
+        state: absent
+        path: /LVM
+    - name: Create new LVM volume group
+      lvg:
+        vg: "vg0"
+        pvs:
+          - "{{ lvm_device[0] }}"
+        state: present
+  when:
+    - lvm_device is defined
+    - lvm_device[0] is defined
+...

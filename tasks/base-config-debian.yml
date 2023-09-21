@@ -1,0 +1,10 @@
+---
+- name: Disable mouse in vim (Debian 9+)
+  copy:
+    src: vimrc.local
+    dest: /etc/vim/vimrc.local
+    owner: root
+    group: root
+    mode: 0644
+  when: "ansible_distribution_major_version|int >= 9"
+...

@@ -1,0 +1,11 @@
+---
+- name: Update apt repository list
+  apt:
+    update_cache: yes
+
+- name: Reload udev rules
+  command: "{{ item }}"
+  with_items:
+    - udevadm control --reload-rules
+    - udevadm trigger
+...

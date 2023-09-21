@@ -1,0 +1,63 @@
+---
+- name: Install apt-transport-https
+  apt:
+    name: apt-transport-https
+    state: present
+    cache_valid_time: 3600
+
+- name: check backports APT on sources.list
+  shell: "grep -i {{ ansible_distribution_release }}-backports /etc/apt/sources.list"
+  register: backport_in_sources_list
+  check_mode: no
+  failed_when: no
+  changed_when: no
+
+- name: check backports APT on sources.list.d
+  shell: "grep -ri {{ ansible_distribution_release }}-backports /etc/apt/sources.list.d/"
+  register: backport_in_sources_list_d
+  check_mode: no
+  failed_when: no
+  changed_when: no
+
+- name: Show sources.list grep result
+  debug:
+    var: backport_in_sources_list
+    verbosity: 2
+  check_mode: no
+
+- name: Show sources.list.d grep result
+  debug:
+    var: backport_in_sources_list_d
+    verbosity: 2
+  check_mode: no
+
+- name: set backports APT repository for archived dists
+  set_fact:
+    apt_backports_repository_entry: "deb {{ apt_backports_repository_url|default('http://archive.debian.org/debian') }} {{ ansible_distribution_release }}-backports {{ apt_backports_repository }}"
+  tags:
+    - apt-backports-repository
+  when:
+    - ansible_distribution_major_version|int <= 8
+    - backport_in_sources_list.rc == 1
+    - backport_in_sources_list_d.rc == 1
+
+- name: set backports APT repository for current dists
+  set_fact:
+    apt_backports_repository_entry: "deb {{ apt_backports_repository_url|default('http://ftp.debian.org/debian') }} {{ ansible_distribution_release }}-backports {{ apt_backports_repository }}"
+  tags:
+    - apt-backports-repository
+  when:
+    - ansible_distribution_major_version|int > 8
+    - backport_in_sources_list.rc == 1
+    - backport_in_sources_list_d.rc == 1
+
+- name: Install backports repository
+  apt_repository:
+    repo: "{{ apt_backports_repository_entry }}"
+  tags:
+    - apt-backports-repository
+  notify:
+    - Update apt repository list
+  when:
+    - backport_in_sources_list.rc == 1
+    - backport_in_sources_list_d.rc == 1

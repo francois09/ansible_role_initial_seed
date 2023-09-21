@@ -1,0 +1,29 @@
+---
+- import_tasks: base-packages-debian.yml
+  when:
+    - ansible_distribution == 'Debian'
+
+- import_tasks: additionnal-packages-debian.yml
+  when:
+    - ansible_distribution == 'Debian'
+
+- import_tasks: base-config-debian.yml
+  when:
+    - ansible_distribution == 'Debian'
+
+- import_tasks: apt_backports_repository.yml
+  when:
+    - apt_backports_repository != False
+    - ansible_distribution == 'Debian'
+
+- meta: flush_handlers
+
+- import_tasks: debian-unattended-upgrades.yml
+  when:
+    - apt_periodic_unattended_upgrade != False
+    - ansible_distribution == 'Debian'
+
+- import_tasks: convert_lvm_mount.yml
+  when:
+    - ansible_distribution == 'Debian'
+    - initial_seed__lvm_bypass_convert|default(False) == False
