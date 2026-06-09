@@ -4,4 +4,5 @@
     name: "{{ additionnal_packages }}"
     update_cache: yes
     state: present
-  when: additionnal_packages|default(False)
+  when:
+    - additionnal_packages is defined

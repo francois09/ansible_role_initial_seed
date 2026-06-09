@@ -31,7 +31,7 @@ Unattended-Upgrade::Origins-Pattern {
         "origin=Debian,codename=${distro_codename},label=Debian";
         "origin=Debian,codename=${distro_codename},label=Debian-Security";
         "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";
-//      "o=Debian Backports,n=${distro_codename}-backports,l=Debian Backports";
+        "o=Debian Backports,n=${distro_codename}-backports,l=Debian Backports";
 
         // Archive or Suite based matching:
         // Note that this will silently match a different release after
@@ -109,14 +109,14 @@ Unattended-Upgrade::Package-Blacklist {
 
 // Remove unused automatically installed kernel-related packages
 // (kernel images, kernel headers and kernel version locked tools).
-//Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
+Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
 
 // Do automatic removal of newly unused dependencies after the upgrade
-//Unattended-Upgrade::Remove-New-Unused-Dependencies "true";
+Unattended-Upgrade::Remove-New-Unused-Dependencies "true";
 
 // Do automatic removal of unused packages after the upgrade
 // (equivalent to apt-get autoremove)
-//Unattended-Upgrade::Remove-Unused-Dependencies "false";
+Unattended-Upgrade::Remove-Unused-Dependencies "false";
 
 // Automatically reboot *WITHOUT CONFIRMATION* if
 //  the file /var/run/reboot-required is found after the upgrade

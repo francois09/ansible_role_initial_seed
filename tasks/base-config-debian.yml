@@ -7,4 +7,28 @@
     group: root
     mode: 0644
   when: "ansible_distribution_major_version|int >= 9"
+
+- name: Disable dpkg pager
+  copy:
+    src: no-pager
+    dest: /etc/dpkg/dpkg.cfg.d/no-pager
+    owner: root
+    group: root
+    mode: 0644
+  when: "ansible_distribution_major_version|int >= 9"
+
+# - name: Remediation of algif_aead
+#   copy:
+#     src: disable-algif-aead.conf
+#     dest: /etc/modprobe.d/disable-algif-aead.conf
+#     owner: root
+#     group: root
+#     mode: 0644
+#   when: "ansible_distribution_major_version|int >= 9"
+
+- name: End of remediation of algif_aead
+  file:
+    path: /etc/modprobe.d/disable-algif-aead.conf
+    state: absent
+  when: "ansible_distribution_major_version|int >= 9"
 ...
